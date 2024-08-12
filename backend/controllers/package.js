@@ -20,7 +20,7 @@ exports.getPackageById = async (req, res) => {
 exports.createPackage = async (req, res) => {
   const package = new Package(req.body)
   await package.save()
-  res.status(201).json({message: 'Package created', package})
+  res.status(201).json(package)
 }
 
 exports.updatePackage = async (req, res) => {

@@ -23,7 +23,7 @@ function WebDriver() {
             .then(response => {
                 // Mettre à jour les données de livraison locales
                 setDeliveryData(response.data);
-
+                fetchDeliveryData()
                 // Informer le serveur via WebSocket
                 socket.emit('status_changed', { delivery_id: deliveryId, status });
             })

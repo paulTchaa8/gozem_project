@@ -113,7 +113,7 @@ function WebTracker() {
                       >
                         <Popup>
                           <div>
-                            <p>{packageData.from_address}</p>
+                            <p><strong>Source:</strong> {packageData.from_address}</p>
                             <p><strong>Lat: </strong> {packageData.from_location.lat}</p>
                             <p><strong>Lng: </strong> {packageData.from_location.lng}</p>
                           </div>
@@ -143,7 +143,7 @@ function WebTracker() {
                       >
                         <Popup>
                           <div>
-                            <p>{packageData.to_address}</p>
+                            <p><strong>Destination:</strong> {packageData.to_address}</p>
                             <p><strong>Lat: </strong>{packageData.to_location.lat}</p>
                             <p><strong>Lng: </strong>{packageData.to_location.lng}</p>
                           </div>

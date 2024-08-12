@@ -38,12 +38,14 @@ function WebAdmin() {
 
   const createPackage = async () => {
       const res = await axios.post('http://localhost:3000/api/package', newPackage);
-      setPackages([...packages, res.data]);
+      console.log('createPackage => ', res)
+      fetchPackages()
   };
 
   const createDelivery = async () => {
       const res = await axios.post('http://localhost:3000/api/delivery', newDelivery);
-      setDeliveries([...deliveries, res.data]);
+      console.log('createDelivery => ', res)
+      fetchDeliveries()
   };
 
   useEffect(() => {
