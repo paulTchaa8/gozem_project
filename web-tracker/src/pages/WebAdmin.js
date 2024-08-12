@@ -180,26 +180,26 @@ function WebAdmin() {
                   <h2>Add a Delivery</h2>
                   <div className="form-group">
                       <input
-                          type="text"
-                          placeholder="Longitude"
-                          onChange={(e) =>
-                              setNewDelivery({
-                                  ...newDelivery,
-                                  location: { ...newDelivery.location, lng: e.target.value },
-                              })
-                          }
-                          className="input"
+                        type="text"
+                        placeholder="Latitude"
+                        onChange={(e) =>
+                            setNewDelivery({
+                                ...newDelivery,
+                                location: { ...newDelivery.location, lat: e.target.value },
+                            })
+                        }
+                        className="input"
                       />
                       <input
-                          type="text"
-                          placeholder="Latitude"
-                          onChange={(e) =>
-                              setNewDelivery({
-                                  ...newDelivery,
-                                  location: { ...newDelivery.location, lat: e.target.value },
-                              })
-                          }
-                          className="input"
+                        type="text"
+                        placeholder="Longitude"
+                        onChange={(e) =>
+                            setNewDelivery({
+                                ...newDelivery,
+                                location: { ...newDelivery.location, lng: e.target.value },
+                            })
+                        }
+                        className="input"
                       />
                       <select
                           value={newDelivery.package_id}
