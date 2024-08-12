@@ -69,16 +69,16 @@ function WebDriver() {
                     <p><strong>Status:</strong> {deliveryData.status}</p>
                     <div className="status-map-container">
                       {driverLocation && (
-                          <MapContainer center={[driverLocation.lat, driverLocation.lng]} zoom={13} className="leaflet-container">
-                              <TileLayer
-                                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                              />
-                              <Marker position={[driverLocation.lat, driverLocation.lng]}>
-                                  <Popup>
-                                      You are here.
-                                  </Popup>
-                              </Marker>
-                          </MapContainer>
+                        <MapContainer center={[driverLocation.lat, driverLocation.lng]} zoom={13} className="leaflet-container">
+                            <TileLayer
+                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                            />
+                            <Marker position={[driverLocation.lat, driverLocation.lng]}>
+                                <Popup>
+                                    You are here.
+                                </Popup>
+                            </Marker>
+                        </MapContainer>
                       )}
                         <div className="status-buttons">
                         {/* mise a jour du statut updateStatus() */}

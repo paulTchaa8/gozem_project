@@ -3,14 +3,26 @@ import axios from 'axios';
 import io from 'socket.io-client';
 import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+import L from 'leaflet'
 
 const socket = io('http://localhost:3000');
 
 function WebTracker() {
-    const [packageId, setPackageId] = useState('');
-    const [packageData, setPackageData] = useState(null);
-    const [deliveryData, setDeliveryData] = useState(null);
-    const [currentLocation, setCurrentLocation] = useState(null);
+    const [packageId, setPackageId] = useState('')
+    const [packageData, setPackageData] = useState(null)
+    const [deliveryData, setDeliveryData] = useState(null)
+    const [currentLocation, setCurrentLocation] = useState(null)
+  
+    // Charger des images personnalisées pour les icônes
+    const customMarkerIcon = new L.Icon({
+      iconUrl: require('leaflet/dist/images/marker-icon.png'),
+      iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+      iconSize: [25, 41], // taille de l'icône
+      iconAnchor: [12, 41], // ancre de l'icône (le point qui correspond à la latitude/longitude)
+      popupAnchor: [1, -34], // point où s'ouvre le popup par rapport à l'ancre de l'icône
+      shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+      shadowSize: [41, 41]
+    })
 
     // Fetch le package a partir du package ID
     const fetchPackageData = async () => {
@@ -34,7 +46,7 @@ function WebTracker() {
             setDeliveryData(res.data)
             setCurrentLocation(res.data.location) // position initiale.
 
-            // Listen for delivery updates via WebSocket
+            // mise a jour des delivery via websockets
             socket.on('delivery_updated', (data) => {
                 if (data.delivery_id === deliveryId) {
                     setDeliveryData(data)
@@ -82,29 +94,68 @@ function WebTracker() {
 
             {deliveryData && currentLocation && (
                 <div className="delivery-details">
-                    <h2>Delivery Details</h2>
-                    <p><strong>Status:</strong> {deliveryData.status}</p>
-                    <p><strong>Current Location:</strong> {currentLocation.lat}, {currentLocation.lng}</p>
+                  <h2>Delivery Details</h2>
+                  <p><strong>Status:</strong> {deliveryData.status}</p>
+                  <p><strong>Current Location:</strong> {currentLocation.lat}, {currentLocation.lng}</p>
 
-                    <MapContainer center={[currentLocation.lat, currentLocation.lng]} zoom={13} className="leaflet-container">
-                        <TileLayer
-                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                        />
-                        <Marker position={[packageData.from_location.lat, packageData.from_location.lng]}>
-                            <Popup>Package Source</Popup>
-                        </Marker>
-                        <Marker position={[packageData.to_location.lat, packageData.to_location.lng]}>
-                            <Popup>Package Destination</Popup>
-                        </Marker>
-                        <Marker position={[currentLocation.lat, currentLocation.lng]}>
-                            <Popup>Current Location</Popup>
-                        </Marker>
-                        <Polyline positions={[
-                            [packageData.from_location.lat, packageData.from_location.lng],
-                            [currentLocation.lat, currentLocation.lng],
-                            [packageData.to_location.lat, packageData.to_location.lng]
+                  <MapContainer key={packageData._id} 
+                    center={[currentLocation.lat, currentLocation.lng]} zoom={13} 
+                    className="leaflet-container"
+                  >
+                      <TileLayer
+                          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                      />
+                      <Marker position={[
+                        packageData.from_location.lat, 
+                        packageData.from_location.lng
+                        ]}
+                        icon={customMarkerIcon}
+                      >
+                        <Popup>
+                          <div>
+                            <p>{packageData.from_address}</p>
+                            <p><strong>Lat: </strong> {packageData.from_location.lat}</p>
+                            <p><strong>Lng: </strong> {packageData.from_location.lng}</p>
+                          </div>
+                        </Popup>
+                      </Marker>
+
+                      <Marker position={[
+                        currentLocation.lat, 
+                        currentLocation.lng
+                        ]}
+                        icon={customMarkerIcon}
+                      >
+                        <Popup>
+                          <div>
+                            <p>Position actuelle</p>
+                            <p><strong>Lat: </strong> {currentLocation.lat}</p>
+                            <p><strong>Lng: </strong> {currentLocation.lng}</p>
+                          </div>  
+                        </Popup>
+                      </Marker>
+
+                      <Marker position={[
+                        packageData.to_location.lat, 
+                        packageData.to_location.lng
+                        ]}
+                        icon={customMarkerIcon}
+                      >
+                        <Popup>
+                          <div>
+                            <p>{packageData.to_address}</p>
+                            <p><strong>Lat: </strong>{packageData.to_location.lat}</p>
+                            <p><strong>Lng: </strong>{packageData.to_location.lng}</p>
+                          </div>
+                        </Popup>
+                      </Marker>
+
+                      <Polyline positions={[
+                          [packageData.from_location.lat, packageData.from_location.lng],
+                          [currentLocation.lat, currentLocation.lng],
+                          [packageData.to_location.lat, packageData.to_location.lng]
                         ]} color="blue" />
-                    </MapContainer>
+                  </MapContainer>
                 </div>
             )}
         </div>
