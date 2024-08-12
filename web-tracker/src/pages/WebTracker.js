@@ -12,13 +12,14 @@ function WebTracker() {
     const [deliveryData, setDeliveryData] = useState(null);
     const [currentLocation, setCurrentLocation] = useState(null);
 
-    // Fetch package data based on package ID
+    // Fetch le package a partir du package ID
     const fetchPackageData = async () => {
         try {
             const res = await axios.get(`http://localhost:3000/api/package/${packageId}`);
             setPackageData(res.data);
 
             if (res.data.active_delivery_id) {
+                console.log('active oui', res.data.active_delivery_id)
                 fetchDeliveryData(res.data.active_delivery_id);
             }
         } catch (error) {
@@ -26,32 +27,37 @@ function WebTracker() {
         }
     };
 
-    // Fetch delivery data if the package has an active delivery
+    // recuperer la livraison active..
     const fetchDeliveryData = async (deliveryId) => {
         try {
             const res = await axios.get(`http://localhost:3000/api/delivery/${deliveryId}`);
-            setDeliveryData(res.data);
-            setCurrentLocation(res.data.location); // Set initial location
+            setDeliveryData(res.data)
+            setCurrentLocation(res.data.location) // position initiale.
 
             // Listen for delivery updates via WebSocket
             socket.on('delivery_updated', (data) => {
                 if (data.delivery_id === deliveryId) {
-                    setDeliveryData(data);
-                    setCurrentLocation(data.location); // Update current location on the map
+                    setDeliveryData(data)
+                    setCurrentLocation(data.location) // mettre a jour la map ici..
                 }
             });
         } catch (error) {
-            console.error("Error fetching delivery data:", error);
+            console.error("Erreur fetching delivery data:", error)
         }
-    };
+    }
 
-    // Clean up socket connection when the component unmounts
     useEffect(() => {
         return () => {
             socket.off('delivery_updated');
-        };
-    }, []);
+        }
+    }, [])
 
+    useEffect(() => {
+        fetchPackageData()
+    }, [packageId])
+    
+    console.log('current ifif', currentLocation)
+    console.log('pack log', packageData, deliveryData)
     return (
         <div>
             <h1>Track Your Package</h1>
@@ -63,7 +69,7 @@ function WebTracker() {
                     placeholder="Enter Package ID"
                     className="input"
                 />
-                <button onClick={fetchPackageData} className="btn">Track</button>
+                {/* <button onClick={fetchPackageData} className="btn">Track</button> */}
             </div>
 
             {packageData && (
@@ -84,19 +90,19 @@ function WebTracker() {
                         <TileLayer
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         />
-                        <Marker position={[deliveryData.source.lat, deliveryData.source.lng]}>
+                        <Marker position={[packageData.from_location.lat, packageData.from_location.lng]}>
                             <Popup>Package Source</Popup>
                         </Marker>
-                        <Marker position={[deliveryData.destination.lat, deliveryData.destination.lng]}>
+                        <Marker position={[packageData.to_location.lat, packageData.to_location.lng]}>
                             <Popup>Package Destination</Popup>
                         </Marker>
                         <Marker position={[currentLocation.lat, currentLocation.lng]}>
                             <Popup>Current Location</Popup>
                         </Marker>
                         <Polyline positions={[
-                            [deliveryData.source.lat, deliveryData.source.lng],
+                            [packageData.from_location.lat, packageData.from_location.lng],
                             [currentLocation.lat, currentLocation.lng],
-                            [deliveryData.destination.lat, deliveryData.destination.lng]
+                            [packageData.to_location.lat, packageData.to_location.lng]
                         ]} color="blue" />
                     </MapContainer>
                 </div>
