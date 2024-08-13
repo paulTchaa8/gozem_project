@@ -48,7 +48,7 @@ function WebTracker() {
 
             // mise a jour des delivery via websockets
             socket.on('delivery_updated', (data) => {
-                if (data.delivery_id === deliveryId) {
+                if (data._id === deliveryId) {
                     setDeliveryData(data)
                     setCurrentLocation(data.location) // mettre a jour la map ici..
                 }
@@ -68,8 +68,6 @@ function WebTracker() {
         fetchPackageData()
     }, [packageId])
     
-    console.log('current ifif', currentLocation)
-    console.log('pack log', packageData, deliveryData)
     return (
         <div>
             <h1>Track Your Package</h1>

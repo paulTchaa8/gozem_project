@@ -47,7 +47,7 @@ io.on('connection', (socket) => {
 
   socket.on('location_changed', async (data) => {
     const delivery = await Delivery.findOneAndUpdate(
-        { delivery_id: data.delivery_id },
+        { _id: data.delivery_id },
         { location: data.location }
     )
     io.emit('delivery_updated', delivery)
@@ -55,7 +55,7 @@ io.on('connection', (socket) => {
 
   socket.on('status_changed', async (data) => {
       const delivery = await Delivery.findOneAndUpdate(
-          { delivery_id: data.delivery_id },
+          { _id: data.delivery_id },
           { status: data.status }
       )
       io.emit('delivery_updated', delivery)
