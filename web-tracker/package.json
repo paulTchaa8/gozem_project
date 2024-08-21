@@ -16,7 +16,7 @@
     "socket.io-client": "^4.7.5",
     "web-vitals": "^2.1.4"
   },
-  "homepage": "https://paulTchaa8.github.io/gozem_project",
+  "homepage": "https://paulTchaa8.github.io/gozem_project/web-tracker",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
