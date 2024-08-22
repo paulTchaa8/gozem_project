@@ -26,26 +26,28 @@ function WebAdmin() {
     location: { lat: 0, lng: 0 }
   });
 
+  const apiUrl = process.env.REACT_APP_API_URL
+
   const fetchPackages = async () => {
-      const res = await axios.get('http://localhost:3000/api/package');
+      const res = await axios.get(`${apiUrl}/package`);
       setPackages(res.data);
   };
 
   const fetchDeliveries = async () => {
-      const res = await axios.get('http://localhost:3000/api/delivery');
+      const res = await axios.get(`${apiUrl}/delivery`);
       setDeliveries(res.data);
   };
 
   const createPackage = async () => {
-      const res = await axios.post('http://localhost:3000/api/package', newPackage);
+      const res = await axios.post(`${apiUrl}/package`, newPackage);
       console.log('createPackage => ', res)
       fetchPackages()
   };
 
   const createDelivery = async () => {
-      const res = await axios.post('http://localhost:3000/api/delivery', newDelivery);
-      console.log('createDelivery => ', res)
-      fetchDeliveries()
+    const res = await axios.post(`${apiUrl}/delivery`, newDelivery);
+    console.log('createDelivery => ', res)
+    fetchDeliveries()
   };
 
   useEffect(() => {

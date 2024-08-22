@@ -1,4 +1,4 @@
-## Projet de web tracking des livraisons
+## Projet de web de suivi des livraisons
 
 Le projet est reparti en 2 dossiers: web-tracker pour le frontend, et le dossier backend.
 

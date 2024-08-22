@@ -5,7 +5,8 @@ import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet'
 
-const socket = io('http://localhost:3000');
+const socket = io(`${process.env.REACT_APP_BACKEND_URL}`)
+const apiUrl = process.env.REACT_APP_API_URL
 
 function WebTracker() {
     const [packageId, setPackageId] = useState('')
@@ -27,7 +28,7 @@ function WebTracker() {
     // Fetch le package a partir du package ID
     const fetchPackageData = async () => {
         try {
-            const res = await axios.get(`http://localhost:3000/api/package/${packageId}`);
+            const res = await axios.get(`${apiUrl}/package/${packageId}`);
             setPackageData(res.data);
 
             if (res.data.active_delivery_id) {
@@ -42,7 +43,7 @@ function WebTracker() {
     // recuperer la livraison active..
     const fetchDeliveryData = async (deliveryId) => {
         try {
-            const res = await axios.get(`http://localhost:3000/api/delivery/${deliveryId}`);
+            const res = await axios.get(`${apiUrl}/delivery/${deliveryId}`);
             setDeliveryData(res.data)
             setCurrentLocation(res.data.location) // position initiale.
 

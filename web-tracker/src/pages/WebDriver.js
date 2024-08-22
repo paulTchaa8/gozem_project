@@ -5,7 +5,8 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet'
 
-const socket = io('http://localhost:3000');
+const socket = io(`${process.env.REACT_APP_BACKEND_URL}`)
+const apiUrl = process.env.REACT_APP_API_URL
 
 function WebDriver() {
     const [deliveryId, setDeliveryId] = useState('');
@@ -13,13 +14,13 @@ function WebDriver() {
     const [driverLocation, setDriverLocation] = useState(null);
 
     const fetchDeliveryData = async () => {
-        const res = await axios.get(`http://localhost:3000/api/delivery/${deliveryId}`);
+        const res = await axios.get(`${apiUrl}/delivery/${deliveryId}`);
         setDeliveryData(res.data);
         setDriverLocation(res.data.location);
     };
 
     const updateStatus = (status) => {
-        axios.put(`http://localhost:3000/api/delivery/${deliveryId}/status`, { status })
+        axios.put(`${apiUrl}/delivery/${deliveryId}/status`, { status })
             .then(response => {
                 // Mettre à jour les données de livraison locales
                 setDeliveryData(response.data);
