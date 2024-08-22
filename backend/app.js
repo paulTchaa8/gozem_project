@@ -17,7 +17,10 @@ mongoose.connect(MONGO_URL)
     .catch(() => console.log('Connexion echouee'))
 
 // gerer les erreurs Cross Origin..
-app.use(cors())
+// app.use(cors())
+app.use(cors({
+    origin: 'https://web-tracker-project.onrender.com',
+  }))
 
 app.use(bodyParser.json())
 
